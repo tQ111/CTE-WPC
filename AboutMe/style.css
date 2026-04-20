@@ -1,0 +1,96 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
+}
+
+body{
+  background:rgb(217,217,217);
+  color:#1c1c1c;
+}
+
+.navBar{
+  display:flex;
+  justify-content:flex-start;
+  padding:15px 25px;
+  background:rgb(235,235,235);
+  border-bottom:1px solid rgb(200,200,200);
+}
+
+.navLinks{
+  display:flex;
+  gap:12px;
+}
+
+.navItem{
+  text-decoration:none;
+  color:#1c1c1c;
+  background:rgb(245,245,245);
+  padding:10px 16px;
+  border-radius:8px;
+  font-size:14px;
+  border:1px solid rgb(200,200,200);
+  transition:0.2s;
+}
+
+.navItem:hover{
+  background:rgb(230,230,230);
+}
+
+.bigContent{
+  padding:30px;
+}
+
+.cardRow{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.card{
+  flex:1;
+  min-width:250px;
+  background:rgb(245,245,245);
+  padding:20px;
+  border-radius:10px;
+  border:1px solid rgb(200,200,200);
+}
+
+.topBox{
+  width:800px;
+  margin:20px auto;
+  padding:15px;
+  background:rgb(245,245,245);
+  border:2px solid rgb(245,245,245);
+  border-radius:12px;
+  text-align:center;
+}
+
+.imageBox{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.schoolImg{
+  width:800px;
+  border:4px solid white;
+  border-radius:12px;
+}
+
+ul{
+  padding-left:20px;
+}
+
+.resumeWrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.resumeImg{
+    width:600px;
+    max-width:90%;
+    display:block;
+}
