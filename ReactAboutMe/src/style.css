@@ -10,20 +10,30 @@ body{
   color:#1c1c1c;
 }
 
+
+.navBar{
+  display:flex;
+  justify-content:left;
+  padding:15px 25px;
+  background:rgb(73, 73, 73);
+  border-bottom:1px solid rgb(200,200,200);
+  border-radius:6.7px;
+}
+
 .navLinks{
   display:flex;
-  gap:12px;
 }
 
 .navItem{
   text-decoration:none;
   color:#1c1c1c;
-  background:rgb(245,245,245);
+  background:rgb(156, 156, 156);
   padding:10px 16px;
   border-radius:8px;
   font-size:14px;
-  border:1px solid rgb(200,200,200);
+  border:1px solid rgb(92, 92, 92);
   transition:0.2s;
+  margin-right:6.7px;
 }
 
 .navItem:hover{

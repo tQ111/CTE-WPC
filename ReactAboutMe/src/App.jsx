@@ -9,10 +9,10 @@ function App() {
   return (
     <>
       <nav className="navBar">
-        <a href="/about" className="navItem">About</a>
-        <a href="/interests" className="navItem">Interests</a>
-        <a href="/projects" className="navItem">Projects</a>
-        <a href="/resume" className="navItem">Resume</a>
+        <Link to="/about" className="navItem">About</Link>
+        <Link to="/interests" className="navItem">Interests</Link>
+        <Link to="/projects" className="navItem">Projects</Link>
+        <Link to="/resume" className="navItem">Resume</Link>
       </nav>
 
       <Routes>
