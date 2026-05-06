@@ -15,8 +15,8 @@ body{
   display:flex;
   justify-content:left;
   padding:15px 25px;
-  background:rgb(73, 73, 73);
-  border-bottom:1px solid rgb(200,200,200);
+  background:grey;
+  border-bottom:1px solid rgb(170, 170, 170);
   border-radius:6.7px;
 }
 
@@ -34,6 +34,7 @@ body{
   border:1px solid rgb(92, 92, 92);
   transition:0.2s;
   margin-right:6.7px;
+  font-weight:bold;
 }
 
 .navItem:hover{
@@ -151,4 +152,16 @@ ul{
 .projectTitle{
   text-align:center;
   margin:30px 0 20px 0;
+}
+
+footer{
+  display:flex;
+  flex:1;
+  justify-content:center;
+  background-color:grey;
+}
+
+#vertRule{
+  border-left:2px solid black; 
+  height: 67px;
 }
