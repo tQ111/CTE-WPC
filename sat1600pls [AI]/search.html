@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tim is tuff</title>
+  <link rel="icon" type="image/png" href="MYsatlogo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 32px 16px;
+    }
+    .filter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .filter-card-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+    .filter-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .filter-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-light);
+    }
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .search-btn {
+      padding: 12px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      width: 100%;
+    }
+    .search-btn:hover { opacity: 0.85; }
+    .search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .back-link {
+      font-size: 13px;
+      color: var(--text-light);
+      text-decoration: none;
+      text-align: center;
+    }
+    .back-link:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="filter-card">
+    <div class="filter-card-title">where we landing</div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">difficulty</div>
+      <div class="pill-group">
+        <button class="pill" data-group="diff" data-val="E" onclick="togglePill(this,'diff')">easy</button>
+        <button class="pill" data-group="diff" data-val="M" onclick="togglePill(this,'diff')">mid</button>
+        <button class="pill" data-group="diff" data-val="H" onclick="togglePill(this,'diff')">6-7</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">section</div>
+      <div class="pill-group">
+        <button class="pill" data-group="section" data-val="math" onclick="togglePill(this,'section')">math</button>
+        <button class="pill" data-group="section" data-val="rw" onclick="togglePill(this,'section')">reading & writing</button>
+      </div>
+    </div>
+
+    <div class="filter-section" id="topicSection" style="display:none;">
+      <div class="filter-section-label">topic</div>
+      <div class="pill-group" id="topicGroup"></div>
+    </div>
+
+    <button class="search-btn" id="searchBtn" onclick="doSearch()" disabled>search</button>
+    <a href="index.html" class="back-link">← back</a>
+  </div>
+
+  <script>
+    const DOMAINS = {
+      math: [
+        { id: 'H', label: 'algebra' },
+        { id: 'P', label: 'advanced math' },
+        { id: 'Q', label: 'problem solving' },
+        { id: 'S', label: 'geometry & trig' },
+      ],
+      rw: [
+        { id: 'INI', label: 'information & ideas' },
+        { id: 'CAS', label: 'craft & structure' },
+        { id: 'EOI', label: 'expression of ideas' },
+        { id: 'SEC', label: 'standard english' },
+      ]
+    };
+
+    const sel = { section: null, diffs: new Set(), topics: new Set() };
+
+    function togglePill(btn, group) {
+      if (group === 'section') {
+        const alreadyActive = btn.classList.contains('active');
+        document.querySelectorAll('[data-group="section"]').forEach(b => b.classList.remove('active'));
+        if (alreadyActive) {
+          sel.section = null;
+          sel.topics.clear();
+          document.getElementById('topicSection').style.display = 'none';
+          document.getElementById('topicGroup').innerHTML = '';
+        } else {
+          btn.classList.add('active');
+          sel.section = btn.dataset.val;
+          sel.topics.clear();
+          renderTopics(btn.dataset.val);
+          document.getElementById('topicSection').style.display = 'flex';
+        }
+      } else if (group === 'diff') {
+        btn.classList.toggle('active');
+        sel.diffs.has(btn.dataset.val) ? sel.diffs.delete(btn.dataset.val) : sel.diffs.add(btn.dataset.val);
+      } else if (group === 'topic') {
+        btn.classList.toggle('active');
+        sel.topics.has(btn.dataset.val) ? sel.topics.delete(btn.dataset.val) : sel.topics.add(btn.dataset.val);
+      }
+      updateBtn();
+    }
+
+    function renderTopics(section) {
+      const group = document.getElementById('topicGroup');
+      group.innerHTML = '';
+      DOMAINS[section].forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = 'pill';
+        btn.dataset.group = 'topic';
+        btn.dataset.val = d.id;
+        btn.textContent = d.label;
+        btn.onclick = () => togglePill(btn, 'topic');
+        group.appendChild(btn);
+      });
+    }
+
+    function updateBtn() {
+      document.getElementById('searchBtn').disabled =
+        !(sel.section && sel.diffs.size > 0 && sel.topics.size > 0);
+    }
+
+    function doSearch() {
+      const params = new URLSearchParams({
+        section: sel.section,
+        diffs: [...sel.diffs].join(','),
+        topics: [...sel.topics].join(','),
+      });
+      window.location.href = `questions.html?${params.toString()}`;
+    }
+  </script>
+</body>
+</html>

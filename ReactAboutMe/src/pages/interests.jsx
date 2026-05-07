@@ -53,6 +53,11 @@ function interests() {
         </div>
 
       </div>
+
+      <div>
+        <image src="wruiencao.png">
+      </div>
+
     </section>
   );
 }

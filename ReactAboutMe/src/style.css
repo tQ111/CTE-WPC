@@ -26,7 +26,7 @@ body{
 
 .navItem{
   text-decoration:none;
-  color:#1c1c1c;
+  color:white;
   background:rgb(156, 156, 156);
   padding:10px 16px;
   border-radius:8px;
@@ -156,12 +156,20 @@ ul{
 
 footer{
   display:flex;
-  flex:1;
   justify-content:center;
   background-color:grey;
+  border-radius:6.7px;
+}
+
+.foot{
+  padding: 0px 25px 0px 25px;
+  color:white;
+  margin-top:25px;
+  margin-bottom:15px;
 }
 
 #vertRule{
-  border-left:2px solid black; 
+  border-left:2px solid white; 
   height: 67px;
+  margin-top:20px;
 }

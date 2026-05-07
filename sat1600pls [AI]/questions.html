@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tim is tuff</title>
+  <link rel="icon" type="image/png" href="MYsatlogo.png">
+  <link rel="shortcut icon" type="image/png" href="MYsatlogo.png">
+  <link rel="apple-touch-icon" href="MYsatlogo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f4f0; --surface: #fff; --border: #d8d5ce; --border-light: #ece9e2;
+      --text: #1a1a1a; --text-muted: #6b6760; --text-light: #9b9690;
+      --accent: #1a3a5c; --accent-light: #e8eff7;
+      --correct: #1a6b3a; --correct-bg: #eaf4ee; --correct-border: #a8d5b5;
+      --incorrect: #8b1a1a; --incorrect-bg: #faf0f0; --incorrect-border: #e8b5b5;
+      --neutral-bg: #f0eeea;
+      --serif: 'Source Serif 4', Georgia, serif;
+      --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: var(--sans); display: flex; flex-direction: column; background: var(--surface); color: var(--text); }
+
+    /* HEADER */
+    .header {
+      background: var(--accent);
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; flex-shrink: 0;
+    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-back {
+      color: rgba(255,255,255,0.75); font-size: 13px; text-decoration: none;
+      padding: 5px 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.15s;
+    }
+    .header-back:hover { background: rgba(255,255,255,0.12); color: white; }
+    .header-section { font-size: 15px; font-weight: 600; color: white; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .calc-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.12); color: white;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 5px;
+      padding: 5px 12px; font-size: 12.5px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background 0.15s;
+    }
+    .calc-btn:hover { background: rgba(255,255,255,0.22); }
+
+    /* DASHED */
+    .dashed { border: none; border-top: 2px dashed #ccc; flex-shrink: 0; }
+
+    /* CONTENT */
+    .content { flex: 1; display: flex; overflow: hidden; }
+
+    /* LEFT PANEL */
+    .passage-panel { flex: 1; overflow-y: auto; padding: 40px 52px; border-right: 1.5px solid #e0ddd7; }
+    .passage-text { font-family: var(--serif); font-size: 16px; line-height: 1.85; color: var(--text); max-width: 580px; }
+    .passage-text p { margin-bottom: 14px; }
+    .passage-text p:last-child { margin-bottom: 0; }
+
+    /* RIGHT PANEL */
+    .question-panel { width: 46%; min-width: 420px; display: flex; flex-direction: column; overflow: hidden; }
+    .qnum-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px; border-bottom: 1px solid var(--border-light);
+      background: #faf9f7; flex-shrink: 0;
+    }
+    .qnum-left { display: flex; align-items: center; gap: 10px; }
+    .qnum-box {
+      width: 30px; height: 30px; background: var(--accent); color: white;
+      border-radius: 5px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; transition: background 0.2s;
+    }
+    .mark-review { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text-muted); cursor: pointer; }
+    .mark-review:hover { color: var(--accent); }
+    .diff-badge { font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+    .diff-E { background: #e8f5ec; color: #1a6b3a; }
+    .diff-M { background: #fff4e0; color: #8b5e00; }
+    .diff-H { background: #fdeaea; color: #8b1a1a; }
+    .topic-tag { font-size: 11.5px; color: var(--text-light); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+    .retry-btn { padding: 8px 20px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 6px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .retry-btn:hover { background: var(--accent-light); }
+
+    .question-body { flex: 1; min-height: 0; overflow-y: auto; padding: 24px 24px 0; display: flex; flex-direction: column; gap: 18px; }
+    .question-stem { font-family: var(--serif); font-size: 16px; line-height: 1.75; color: var(--text); }
+    .question-stem p { margin-bottom: 8px; }
+
+    .choices-list { display: flex; flex-direction: column; gap: 9px; }
+    .choice {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 16px; border: 1.5px solid #d0cdc7; border-radius: 6px;
+      cursor: pointer; transition: all 0.12s; background: var(--surface);
+    }
+    .choice:hover:not(.disabled) { border-color: #4a7ab5; background: #f0f5fb; }
+    .choice.selected { border-color: var(--accent); background: #eaf0f8; }
+    .choice.correct  { border-color: var(--correct-border); background: var(--correct-bg); }
+    .choice.incorrect{ border-color: var(--incorrect-border); background: var(--incorrect-bg); }
+    .choice.disabled { cursor: default; }
+    .choice-letter {
+      width: 30px; height: 30px; min-width: 30px; border-radius: 50%;
+      border: 1.5px solid #aaa; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600; color: var(--text-muted); transition: all 0.12s;
+    }
+    .choice.selected  .choice-letter { background: var(--accent);   border-color: var(--accent);   color: white; }
+    .choice.correct   .choice-letter { background: var(--correct);  border-color: var(--correct);  color: white; }
+    .choice.incorrect .choice-letter { background: var(--incorrect);border-color: var(--incorrect);color: white; }
+    .choice-text { font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--text); flex: 1; }
+
+    .action-area { padding: 16px 24px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; max-height: 340px; overflow-y: auto; }
+    .submit-btn {
+      padding: 10px 28px; background: var(--accent); color: white; border: none;
+      border-radius: 6px; font-family: var(--sans); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s; align-self: flex-start;
+    }
+    .submit-btn:hover:not(:disabled) { opacity: 0.85; }
+    .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .rationale-box { border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; animation: fadeUp 0.2s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+    .rationale-result { padding: 10px 14px; font-size: 13.5px; font-weight: 600; }
+    .rationale-result.correct   { color: var(--correct);   background: var(--correct-bg);   border-bottom: 1px solid var(--correct-border); }
+    .rationale-result.incorrect { color: var(--incorrect); background: var(--incorrect-bg); border-bottom: 1px solid var(--incorrect-border); }
+    .rationale-content { padding: 14px 16px; font-family: var(--serif); font-size: 14.5px; line-height: 1.75; }
+    .rationale-content p { margin-bottom: 8px; }
+    .rationale-content p:last-child { margin-bottom: 0; }
+
+    /* BOTTOM BAR */
+    .bottombar { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+    .bottombar-left { font-size: 13px; color: var(--text-muted); }
+    .qpill { background: #1a1a1a; color: white; border: none; border-radius: 7px; padding: 8px 18px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; }
+    .qpill:hover { background: #333; }
+    .bottombar-right { display: flex; gap: 8px; }
+    .nav-btn { padding: 8px 22px; border-radius: 6px; font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: #4a7ab5; color: white; transition: opacity 0.15s; }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn:hover:not(:disabled) { opacity: 0.85; }
+
+    /* Q GRID POPUP */
+    #qlistPopup {
+      display: none; position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+      background: white; border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18); z-index: 200; padding: 16px; min-width: 320px; max-width: 500px;
+    }
+    .qpopup-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-light); margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
+    .qgrid { display: flex; flex-wrap: wrap; gap: 7px; max-height: 240px; overflow-y: auto; }
+    .qgrid-item {
+      width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative;
+      font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.12s;
+    }
+    .qgrid-item:hover { opacity: 0.75; transform: scale(1.06); }
+    .qgrid-item.unanswered { background: white; color: var(--accent); border-color: var(--accent); }
+    .qgrid-item.answered   { background: var(--accent); color: white; border-color: var(--accent); }
+    .qgrid-item.current    { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,58,92,0.25); }
+    .qgrid-item.review::after { content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 9px 9px 0; border-color:transparent #f5a623 transparent transparent; border-radius:0 4px 0 0; }
+
+    /* LOADING */
+    .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 14px; color: var(--text-muted); font-size: 14px; }
+    .spinner { width: 30px; height: 30px; border: 2.5px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg { padding: 24px 32px; color: var(--incorrect); font-size: 14px; }
+    #pageLoader { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 999; font-family: var(--sans); font-size: 14px; color: var(--text-muted); }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div id="pageLoader"><div class="spinner"></div><span>loading questions…</span></div>
+
+<div class="header">
+  <div class="header-left">
+    <a href="search.html" class="header-back">← back</a>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <span class="header-section" id="headerSection">SAT</span>
+      <span id="headerTopic" style="font-size:11px;color:rgba(255,255,255,0.55);font-family:var(--sans);"></span>
+    </div>
+  </div>
+  <div class="header-right" id="headerRight"></div>
+</div>
+
+<hr class="dashed">
+<div class="content" id="content"><div class="loading-state"><div class="spinner"></div></div></div>
+<hr class="dashed">
+
+<div class="bottombar">
+  <div class="bottombar-left">made by tim</div>
+  <button class="qpill" id="qPill" onclick="toggleQList()">Question — of — ▾</button>
+  <div class="bottombar-right">
+    <button class="nav-btn" id="backBtn" onclick="goBack()" disabled>Back</button>
+    <button class="nav-btn" id="nextBtn" onclick="goNext()">Next</button>
+  </div>
+</div>
+
+<div id="qlistPopup">
+  <div class="qpopup-title" id="qpopupTitle">questions</div>
+  <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:20px;height:20px;border-radius:4px;background:var(--accent);border:2px solid var(--accent);box-shadow:0 0 0 2px rgba(26,58,92,0.25);"></div>
+      current
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:20px;height:20px;border-radius:4px;background:white;border:2px solid var(--accent);"></div>
+      unanswered
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:20px;height:20px;border-radius:4px;background:var(--accent);border:2px solid var(--accent);opacity:0.6;"></div>
+      answered
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="position:relative;width:20px;height:20px;border-radius:4px;background:white;border:2px solid var(--accent);">
+        <div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 7px 7px 0;border-color:transparent #f5a623 transparent transparent;border-radius:0 3px 0 0;"></div>
+      </div>
+      for review
+    </div>
+  </div>
+  <div class="qgrid" id="qgrid"></div>
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  const API = 'https://qbank-api.collegeboard.org/msreportingquestionbank-prod/questionbank/digital';
+  const LETTERS = ['A','B','C','D','E','F'];
+  const DIFF_LABEL = { E: 'easy', M: 'mid', H: '6-7' };
+
+  const params  = new URLSearchParams(window.location.search);
+  const section = params.get('section') || 'math';
+  const diffs   = new Set((params.get('diffs') || '').split(',').filter(Boolean));
+  const topics  = new Set((params.get('topics') || '').split(',').filter(Boolean));
+
+  let questions = [], currentIdx = 0, currentQ = null;
+  let submitted = false, selectedChoice = null, loadingQ = false;
+
+  const SESSION_KEY = 'sat_res_' + section;
+  const REVIEW_KEY  = 'sat_review_' + section;
+  const getReviews   = () => { try { return JSON.parse(sessionStorage.getItem(REVIEW_KEY) || '{}'); } catch { return {}; } };
+  const toggleReview = (i) => { const r = getReviews(); r[i] = !r[i]; sessionStorage.setItem(REVIEW_KEY, JSON.stringify(r)); };
+  const clearReviews = () => sessionStorage.removeItem(REVIEW_KEY);
+  const DEAD_KEY  = 'sat_dead';
+  const getDead   = () => { try { return new Set(JSON.parse(sessionStorage.getItem(DEAD_KEY) || '[]')); } catch { return new Set(); } };
+  const markDead  = (id) => { const d = getDead(); d.add(id); sessionStorage.setItem(DEAD_KEY, JSON.stringify([...d])); };
+  const clearDead = () => sessionStorage.removeItem(DEAD_KEY);
+  const getResults = () => { try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || '{}'); } catch { return {}; } };
+  const saveResult = (i, v) => { const r = getResults(); r[i] = v; sessionStorage.setItem(SESSION_KEY, JSON.stringify(r)); };
+  const clearResults = () => sessionStorage.removeItem(SESSION_KEY);
+
+  function renderMath(el) {
+    if (window.renderMathInElement) {
+      renderMathInElement(el, {
+        delimiters: [
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+        throwOnError: false,
+      });
+    }
+  }
+
+  async function boot() {
+    const isMath = section === 'math';
+    document.getElementById('headerSection').textContent = isMath ? 'SAT — Math' : 'SAT — Reading & Writing';
+    if (isMath) {
+      document.getElementById('headerRight').innerHTML = `
+        <button class="calc-btn" onclick="toggleCalc()" id="calcToggleBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+          calculator
+        </button>`;
+    }
+    try {
+      const test = isMath ? 2 : 1;
+      const fetches = [...topics].map(domain =>
+        fetch(`${API}/get-questions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ asmtEventId: 99, test, domain })
+        }).then(r => r.json())
+      );
+      let all = (await Promise.all(fetches)).flat();
+      if (diffs.size > 0) all = all.filter(q => diffs.has(q.difficulty));
+      questions = all.sort((a, b) => (a.external_id || '').localeCompare(b.external_id || ''));
+      // only clear if filter combo changed
+      const filterKey = section + '|' + [...diffs].sort().join(',') + '|' + [...topics].sort().join(',');
+      if (sessionStorage.getItem('sat_filter') !== filterKey) {
+        clearResults(); clearReviews(); clearDead();
+        sessionStorage.setItem('sat_filter', filterKey);
+      }
+      const dead = getDead();
+      questions = questions.filter(q => !dead.has(q.external_id));
+
+      if (!questions.length) {
+        document.getElementById('pageLoader').remove();
+        document.getElementById('content').innerHTML = '<div class="error-msg">no questions found. <a href="search.html">go back</a></div>';
+        return;
+      }
+      document.getElementById('pageLoader').remove();
+      renderGrid();
+      await loadQuestion(0);
+    } catch (err) {
+      document.getElementById('pageLoader').remove();
+      document.getElementById('content').innerHTML = `<div class="error-msg">failed to load: ${err.message}. <a href="search.html">go back</a></div>`;
+    }
+  }
+
+  async function loadQuestion(idx) {
+    if (loadingQ) return;
+    loadingQ = true;
+    currentIdx = idx; submitted = false; selectedChoice = null; currentQ = null;
+    updateNavBtns(); updateQPill(); renderGrid();
+    document.getElementById('content').innerHTML = '<div class="loading-state"><div class="spinner"></div><span>loading…</span></div>';
+    try {
+      const external_id = questions[idx].external_id;
+      const res = await fetch(`${API}/get-question`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ external_id })
+      });
+      let data = await res.json();
+      if ((!data.answerOptions || data.answerOptions.length === 0) && data.type !== 'spr') {
+        const uId = questions[idx].uId || questions[idx].uid;
+        if (uId && uId !== external_id) {
+          try {
+            const res2 = await fetch(`${API}/get-question`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ external_id: uId })
+            });
+            const data2 = await res2.json();
+            if (data2.answerOptions && data2.answerOptions.length > 0) data = data2;
+          } catch {}
+        }
+      }
+      // only skip if truly empty — no stem, no stimulus, no choices
+      const noContent = (!data.stem && !data.stimulus) && (!data.answerOptions || data.answerOptions.length === 0) && data.type !== 'spr';
+      if (noContent) {
+        markDead(questions[idx].external_id);
+        questions.splice(idx, 1);
+        loadingQ = false;
+        updateQPill(); renderGrid();
+        if (questions.length > 0) loadQuestion(Math.min(idx, questions.length - 1));
+        return;
+      }
+      currentQ = data;
+      renderQuestion();
+    } catch (err) {
+      markDead(questions[idx].external_id);
+      questions.splice(idx, 1);
+      loadingQ = false;
+      updateQPill(); renderGrid();
+      if (questions.length > 0) loadQuestion(Math.min(idx, questions.length - 1));
+      return;
+    }
+    loadingQ = false;
+  }
+
+  function renderQuestion() {
+    const meta = questions[currentIdx];
+    const q = currentQ;
+    if (!q) return;
+
+    // update topic in header
+    const topicEl = document.getElementById('headerTopic');
+    if (topicEl) topicEl.textContent = meta.skill_desc || '';
+
+    const isSPR      = q.type === 'spr';
+    const answerOpts = q.answerOptions || [];
+    const stimulus   = q.stimulus || '';
+    const stemHTML   = q.stem || '';
+
+    const content = document.getElementById('content');
+    content.innerHTML = '';
+
+    // LEFT
+    const left = document.createElement('div');
+    left.className = 'passage-panel';
+    left.innerHTML = `<div class="passage-text">${stimulus || stemHTML}</div>`;
+
+    // RIGHT
+    const right = document.createElement('div');
+    right.className = 'question-panel';
+
+    const res = getResults();
+    const prev = res[currentIdx];
+    const qboxBg = prev === 'correct' ? 'var(--correct)' : prev === 'incorrect' ? 'var(--incorrect)' : 'var(--accent)';
+
+    const qnumBar = document.createElement('div');
+    qnumBar.className = 'qnum-bar';
+    qnumBar.innerHTML = `
+      <div class="qnum-left">
+        <div class="qnum-box" id="qnumBox" style="background:${qboxBg}">${currentIdx + 1}</div>
+        <div class="mark-review" id="markReviewBtn" onclick="handleMarkReview()" style="color:${getReviews()[currentIdx] ? '#f5a623' : ''};font-weight:${getReviews()[currentIdx] ? '600' : '400'};">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${getReviews()[currentIdx] ? '#f5a623' : 'none'}" stroke="${getReviews()[currentIdx] ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          ${getReviews()[currentIdx] ? 'marked for review' : 'mark for review'}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="diff-badge diff-${meta.difficulty}">${DIFF_LABEL[meta.difficulty] || meta.difficulty}</span>
+        <span class="topic-tag">${meta.skill_desc || ''}</span>
+      </div>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'question-body';
+
+    if (stimulus) {
+      const stemEl = document.createElement('div');
+      stemEl.className = 'question-stem';
+      stemEl.innerHTML = stemHTML;
+      body.appendChild(stemEl);
+    }
+
+    if (isSPR) {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:6px;">enter your answer</div>
+        <input id="sprInput" type="text" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--sans);font-size:15px;outline:none;" placeholder="your answer…">
+      `;
+      body.appendChild(div);
+    } else if (answerOpts.length === 0) {
+      const div = document.createElement('div');
+      div.style.cssText = 'font-size:13px;color:var(--text-muted);padding:12px 0;';
+      div.textContent = 'this question could not be loaded. press next to continue.';
+      body.appendChild(div);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'choices-list';
+      answerOpts.forEach((opt, i) => {
+        const el = document.createElement('div');
+        el.className = 'choice';
+        el.id = `c-${i}`;
+        el.dataset.optId = opt.id;
+        el.onclick = () => pickChoice(i);
+        el.innerHTML = `<div class="choice-letter" id="cl-${i}">${LETTERS[i] || i}</div><div class="choice-text">${opt.content || ''}</div>`;
+        list.appendChild(el);
+      });
+      body.appendChild(list);
+    }
+
+    const actionArea = document.createElement('div');
+    actionArea.className = 'action-area';
+    actionArea.id = 'actionArea';
+    const noChoices = !isSPR && answerOpts.length === 0;
+    actionArea.innerHTML = isSPR
+      ? `<button class="submit-btn" onclick="submitSPR()">Submit</button>`
+      : noChoices
+        ? ``
+        : `<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit</button>`;
+
+    right.appendChild(qnumBar);
+    right.appendChild(body);
+    right.appendChild(actionArea);
+    content.appendChild(left);
+    content.appendChild(right);
+    renderMath(content);
+  }
+
+  function pickChoice(i) {
+    if (submitted) return;
+    selectedChoice = i;
+    document.querySelectorAll('.choice').forEach((el, j) => el.classList.toggle('selected', j === i));
+    document.getElementById('submitBtn').disabled = false;
+  }
+
+  function showResult(isCorrect, rationaleHTML) {
+    saveResult(currentIdx, isCorrect ? 'correct' : 'incorrect');
+    renderGrid();
+    const box = document.getElementById('qnumBox');
+    if (box) box.style.background = isCorrect ? 'var(--correct)' : 'var(--incorrect)';
+    const aa = document.getElementById('actionArea');
+    const retryBtn = !isCorrect
+      ? `<button class="retry-btn" onclick="retryQuestion()">↺ try again</button>`
+      : '';
+    aa.innerHTML = `
+      ${retryBtn}
+      <div class="rationale-box">
+        <div class="rationale-result ${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ correct' : '✗ incorrect'}</div>
+        <div class="rationale-content" id="rationaleContent">${rationaleHTML}</div>
+      </div>`;
+    renderMath(document.getElementById('rationaleContent'));
+  }
+
+  function retryQuestion() {
+    submitted = false;
+    selectedChoice = null;
+    const isSPR = currentQ && currentQ.type === 'spr';
+    // reset qnum box
+    const box = document.getElementById('qnumBox');
+    if (box) box.style.background = 'var(--accent)';
+    // remove saved result
+    const r = getResults();
+    delete r[currentIdx];
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(r));
+    renderGrid();
+    const aa = document.getElementById('actionArea');
+    if (isSPR) {
+      // restore SPR input
+      const input = document.getElementById('sprInput');
+      if (input) {
+        input.disabled = false;
+        input.value = '';
+        input.style.borderColor = '';
+        input.style.background = '';
+      }
+      aa.innerHTML = `<button class="submit-btn" onclick="submitSPR()">Submit</button>`;
+    } else {
+      // re-enable MC choices
+      document.querySelectorAll('.choice').forEach(el => {
+        el.classList.remove('disabled', 'correct', 'incorrect', 'selected');
+      });
+      aa.innerHTML = `<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit</button>`;
+    }
+  }
+
+  function submitAnswer() {
+    if (selectedChoice === null || submitted) return;
+    submitted = true;
+    const answerOpts = currentQ.answerOptions || [];
+    const correctIds = new Set(currentQ.keys || []);
+    const correctSet = new Set();
+    answerOpts.forEach((opt, i) => { if (correctIds.has(opt.id)) correctSet.add(i); });
+    const isCorrect = correctSet.has(selectedChoice);
+    document.querySelectorAll('.choice').forEach((el, i) => {
+      el.classList.add('disabled'); el.classList.remove('selected');
+      if (correctSet.has(i)) el.classList.add('correct');
+      else if (i === selectedChoice) el.classList.add('incorrect');
+    });
+    showResult(isCorrect, currentQ.rationale || '<p>no explanation available.</p>');
+  }
+
+  function submitSPR() {
+    const input = document.getElementById('sprInput');
+    if (!input || submitted) return;
+    submitted = true;
+    const userVal = input.value.trim();
+    const correctIds = new Set((currentQ.keys || []).map(String));
+    const isCorrect = correctIds.has(userVal);
+    input.disabled = true;
+    input.style.borderColor = isCorrect ? 'var(--correct-border)' : 'var(--incorrect-border)';
+    input.style.background  = isCorrect ? 'var(--correct-bg)' : 'var(--incorrect-bg)';
+    const extra = isCorrect ? '' : ` — answer: ${[...correctIds].join(', ')}`;
+    showResult(isCorrect, currentQ.rationale || '<p>no explanation available.</p>');
+  }
+
+  function goBack() { if (currentIdx > 0) loadQuestion(currentIdx - 1); }
+  function goNext() { if (currentIdx < questions.length - 1) loadQuestion(currentIdx + 1); }
+  function updateNavBtns() {
+    document.getElementById('backBtn').disabled = currentIdx === 0;
+    document.getElementById('nextBtn').disabled = currentIdx === questions.length - 1;
+  }
+  function updateQPill() {
+    document.getElementById('qPill').textContent = `Question ${currentIdx + 1} of ${questions.length} ▾`;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('qgrid');
+    const res  = getResults();
+    const answered = Object.keys(res).length;
+    document.getElementById('qpopupTitle').textContent = `questions — ${answered} answered of ${questions.length}`;
+    grid.innerHTML = '';
+    const reviews = getReviews();
+    questions.forEach((_, i) => {
+      const isCurrent = i === currentIdx;
+      const isAnswered = !!res[i];
+      const isReview = !!reviews[i];
+      const el = document.createElement('div');
+      let cls = 'qgrid-item ' + (isCurrent ? 'current' : isAnswered ? 'answered' : 'unanswered');
+      if (isReview) cls += ' review';
+      el.className = cls;
+      el.textContent = i + 1;
+      el.onclick = () => { toggleQList(); loadQuestion(i); };
+      grid.appendChild(el);
+    });
+  }
+
+  let qlistOpen = false;
+  function toggleQList() {
+    qlistOpen = !qlistOpen;
+    document.getElementById('qlistPopup').style.display = qlistOpen ? 'block' : 'none';
+    if (qlistOpen) renderGrid();
+  }
+  document.addEventListener('click', e => {
+    if (qlistOpen && !e.target.closest('#qlistPopup') && !e.target.closest('#qPill')) {
+      qlistOpen = false;
+      document.getElementById('qlistPopup').style.display = 'none';
+    }
+  });
+
+  function handleMarkReview() {
+    toggleReview(currentIdx);
+    const reviews = getReviews();
+    const isMarked = reviews[currentIdx];
+    const btn = document.getElementById('markReviewBtn');
+    if (btn) {
+      btn.style.color = isMarked ? '#f5a623' : '';
+      btn.style.fontWeight = isMarked ? '600' : '400';
+      btn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="${isMarked ? '#f5a623' : 'none'}" stroke="${isMarked ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${isMarked ? 'marked for review' : 'mark for review'}
+      `;
+    }
+    renderGrid();
+  }
+
+
+  // ── CALCULATOR WIDGET ──
+  let calcOpen = false;
+  let calcExpanded = false;
+
+  function toggleCalc() {
+    calcOpen = !calcOpen;
+    const w = document.getElementById('calcWidget');
+    w.style.display = calcOpen ? 'flex' : 'none';
+  }
+
+  function expandCalc() {
+    calcExpanded = !calcExpanded;
+    const w  = document.getElementById('calcWidget');
+    const ic = document.getElementById('expandIcon');
+    if (calcExpanded) {
+      // near fullscreen
+      w.style.width  = '850px';
+      w.style.height = '715px';
+      w.style.bottom = '80px';
+      w.style.right  = '24px';
+      // swap to compress icon
+      ic.innerHTML = `<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>`;
+    } else {
+      w.style.width  = '360px';
+      w.style.height = '480px';
+      // swap back to expand icon
+      ic.innerHTML = `<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>`;
+    }
+  }
+
+  // ── DRAG ──
+  document.addEventListener('DOMContentLoaded', function() {
+  (function() {
+    const handle = document.getElementById('calcHandle');
+    const widget = document.getElementById('calcWidget');
+    if (!handle || !widget) return;
+    let dragging = false, ox = 0, oy = 0;
+
+    handle.addEventListener('mousedown', e => {
+      if (e.target.closest('button')) return;
+      dragging = true;
+      const rect = widget.getBoundingClientRect();
+      ox = e.clientX - rect.left;
+      oy = e.clientY - rect.top;
+      handle.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      let x = e.clientX - ox;
+      let y = e.clientY - oy;
+      // clamp to viewport
+      x = Math.max(0, Math.min(window.innerWidth  - widget.offsetWidth,  x));
+      y = Math.max(0, Math.min(window.innerHeight - widget.offsetHeight, y));
+      widget.style.right  = 'auto';
+      widget.style.bottom = 'auto';
+      widget.style.left   = x + 'px';
+      widget.style.top    = y + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      dragging = false;
+      handle.style.cursor = 'grab';
+    });
+  })();
+  });
+
+  boot();
+</script>
+
+  <!-- CALCULATOR WIDGET -->
+  <div id="calcWidget" style="display:none;position:fixed;bottom:80px;right:24px;width:360px;height:480px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.22);border:1px solid #d0cdc7;z-index:500;flex-direction:column;overflow:hidden;">
+    <!-- drag handle / titlebar -->
+    <div id="calcHandle" style="
+      background:var(--accent);
+      padding:8px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      cursor:grab;
+      user-select:none;
+      flex-shrink:0;
+    ">
+      <span style="color:white;font-size:12.5px;font-weight:600;font-family:var(--sans);">Desmos Graphing Calculator</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <!-- expand/collapse icon -->
+        <button id="calcExpandBtn" onclick="expandCalc()" title="expand" style="
+          background:rgba(255,255,255,0.15);
+          border:none;
+          border-radius:4px;
+          padding:4px 5px;
+          cursor:pointer;
+          color:white;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          <!-- expand arrows icon -->
+          <svg id="expandIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+        </button>
+        <!-- close icon -->
+        <button onclick="toggleCalc()" title="close" style="
+          background:rgba(255,255,255,0.15);
+          border:none;
+          border-radius:4px;
+          padding:4px 5px;
+          cursor:pointer;
+          color:white;
+          display:flex;
+          align-items:center;
+        ">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- iframe -->
+    <iframe
+      id="calcFrame"
+      src="https://www.desmos.com/testing/collegeboard/graphing"
+      style="flex:1;border:none;width:100%;height:100%;"
+      title="Desmos Calculator"
+    ></iframe>
+  </div>
+
+</body>
+</html>
