@@ -54,9 +54,6 @@ function interests() {
 
       </div>
 
-      <div>
-        <image src="wruiencao.png">
-      </div>
 
     </section>
   );

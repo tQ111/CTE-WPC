@@ -15,8 +15,8 @@
       --bg: #f5f4f0; --surface: #fff; --border: #d8d5ce; --border-light: #ece9e2;
       --text: #1a1a1a; --text-muted: #6b6760; --text-light: #9b9690;
       --accent: #1a3a5c; --accent-light: #e8eff7;
-      --correct: #1a6b3a; --correct-bg: #eaf4ee; --correct-border: #a8d5b5;
-      --incorrect: #8b1a1a; --incorrect-bg: #faf0f0; --incorrect-border: #e8b5b5;
+      --correct: #08c0308e; --correct-bg: #eaf4ee; --correct-border: #02912b;
+      --incorrect: #fd000086; --incorrect-bg: #faf0f0; --incorrect-border: #da00008f;
       --neutral-bg: #f0eeea;
       --serif: 'Source Serif 4', Georgia, serif;
       --sans: 'IBM Plex Sans', system-ui, sans-serif;
@@ -50,7 +50,7 @@
     .calc-btn:hover { background: rgba(255,255,255,0.22); }
 
     /* DASHED */
-    .dashed { border: none; border-top: 2px dashed #ccc; flex-shrink: 0; }
+    .dashed { border: none; border-top: 2px dashed #ccc; flex-shrink: 0; width: 100%; margin: 0; }
 
     /* CONTENT */
     .content { flex: 1; display: flex; overflow: hidden; }
@@ -74,8 +74,9 @@
       border-radius: 5px; display: flex; align-items: center; justify-content: center;
       font-size: 14px; font-weight: 700; transition: background 0.2s;
     }
-    .mark-review { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text-muted); cursor: pointer; }
-    .mark-review:hover { color: var(--accent); }
+    .mark-review { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-muted); cursor: pointer; padding: 4px 8px; border-radius: 5px; transition: background 0.15s; }
+    .mark-review:hover { color: var(--accent); background: rgba(0,0,0,0.05); }
+    .mark-review.marked { color: #f5a623; background: rgba(245,166,35,0.1); font-weight: 600; }
     .diff-badge { font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
     .diff-E { background: #e8f5ec; color: #1a6b3a; }
     .diff-M { background: #fff4e0; color: #8b5e00; }
@@ -128,11 +129,11 @@
     .rationale-content p:last-child { margin-bottom: 0; }
 
     /* BOTTOM BAR */
-    .bottombar { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
-    .bottombar-left { font-size: 13px; color: var(--text-muted); }
-    .qpill { background: #1a1a1a; color: white; border: none; border-radius: 7px; padding: 8px 18px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; }
+    .bottombar { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; position: relative; }
+    .bottombar-left { font-size: 13px; color: var(--text-muted); min-width: 80px; }
+    .qpill { background: #1a1a1a; color: white; border: none; border-radius: 7px; padding: 8px 18px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; position: absolute; left: 50%; transform: translateX(-50%); }
     .qpill:hover { background: #333; }
-    .bottombar-right { display: flex; gap: 8px; }
+    .bottombar-right { display: flex; gap: 8px; min-width: 80px; justify-content: flex-end; }
     .nav-btn { padding: 8px 22px; border-radius: 6px; font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: #4a7ab5; color: white; transition: opacity 0.15s; }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .nav-btn:hover:not(:disabled) { opacity: 0.85; }
@@ -144,15 +145,22 @@
       box-shadow: 0 8px 40px rgba(0,0,0,0.18); z-index: 200; padding: 16px; min-width: 320px; max-width: 500px;
     }
     .qpopup-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-light); margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
-    .qgrid { display: flex; flex-wrap: wrap; gap: 7px; max-height: 240px; overflow-y: auto; }
+    .qgrid { display: flex; flex-direction: column; gap: 0; max-height: 320px; overflow-y: auto; }
+    .qgrid-group { margin-bottom: 14px; }
+    .qgrid-group-label { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(--border-light); }
+    .qgrid-group-items { display: flex; flex-wrap: wrap; gap: 7px; }
     .qgrid-item {
       width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative;
       font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.12s;
     }
     .qgrid-item:hover { opacity: 0.75; transform: scale(1.06); }
     .qgrid-item.unanswered { background: white; color: var(--accent); border-color: var(--accent); }
-    .qgrid-item.answered   { background: var(--accent); color: white; border-color: var(--accent); }
-    .qgrid-item.current    { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,58,92,0.25); }
+    .qgrid-item.current.unanswered { color: var(--accent); }
+    .qgrid-item.current.correct    { background: var(--correct);   color: white; }
+    .qgrid-item.current.incorrect  { background: var(--incorrect); color: white; }
+    .qgrid-item.correct    { background: var(--correct); color: white; border-color: var(--correct); }
+    .qgrid-item.incorrect  { background: var(--incorrect); color: white; border-color: var(--incorrect); }
+    .qgrid-item.current    { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(26,58,92,0.35); border-width: 3px !important; }
     .qgrid-item.review::after { content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 9px 9px 0; border-color:transparent #f5a623 transparent transparent; border-radius:0 4px 0 0; }
 
     /* LOADING */
@@ -196,24 +204,23 @@
 
 <div id="qlistPopup">
   <div class="qpopup-title" id="qpopupTitle">questions</div>
-  <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
-      <div style="width:20px;height:20px;border-radius:4px;background:var(--accent);border:2px solid var(--accent);box-shadow:0 0 0 2px rgba(26,58,92,0.25);"></div>
-      current
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:18px;height:18px;border-radius:4px;background:var(--accent);border:2px solid var(--accent);box-shadow:0 0 0 2px rgba(26,58,92,0.25);"></div>current
     </div>
-    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
-      <div style="width:20px;height:20px;border-radius:4px;background:white;border:2px solid var(--accent);"></div>
-      unanswered
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:18px;height:18px;border-radius:4px;background:white;border:2px solid var(--accent);"></div>unanswered
     </div>
-    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
-      <div style="width:20px;height:20px;border-radius:4px;background:var(--accent);border:2px solid var(--accent);opacity:0.6;"></div>
-      answered
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:18px;height:18px;border-radius:4px;background:var(--correct);border:2px solid var(--correct);"></div>correct
     </div>
-    <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-family:var(--sans);">
-      <div style="position:relative;width:20px;height:20px;border-radius:4px;background:white;border:2px solid var(--accent);">
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="width:18px;height:18px;border-radius:4px;background:var(--incorrect);border:2px solid var(--incorrect);"></div>incorrect
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);">
+      <div style="position:relative;width:18px;height:18px;border-radius:4px;background:white;border:2px solid var(--accent);">
         <div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 7px 7px 0;border-color:transparent #f5a623 transparent transparent;border-radius:0 3px 0 0;"></div>
-      </div>
-      for review
+      </div>for review
     </div>
   </div>
   <div class="qgrid" id="qgrid"></div>
@@ -265,6 +272,10 @@
     document.getElementById('headerSection').textContent = isMath ? 'SAT — Math' : 'SAT — Reading & Writing';
     if (isMath) {
       document.getElementById('headerRight').innerHTML = `
+        <button class="calc-btn" onclick="clearAllReviews()" title="clear all marked for review" style="gap:5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/></svg>
+          clear reviews
+        </button>
         <button class="calc-btn" onclick="toggleCalc()" id="calcToggleBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
           calculator
@@ -296,6 +307,45 @@
         document.getElementById('content').innerHTML = '<div class="error-msg">no questions found. <a href="search.html">go back</a></div>';
         return;
       }
+
+      // pre-filter: test all questions in parallel, remove ones that 500 or have no content
+      document.querySelector('#pageLoader span').textContent = 'checking questions…';
+      const testResults = await Promise.allSettled(
+        questions.map(q =>
+          fetch(`${API}/get-question`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ external_id: q.external_id })
+          }).then(r => r.json())
+        )
+      );
+      const validQuestions = [];
+      testResults.forEach((res, i) => {
+        if (res.status === 'rejected') { markDead(questions[i].external_id); return; }
+        const d = res.value;
+        const hasContent = (d.answerOptions && d.answerOptions.length > 0) || d.type === 'spr' || d.stem || d.stimulus;
+        if (!hasContent) { markDead(questions[i].external_id); return; }
+        // cache the full question data so we don't re-fetch
+        questions[i]._cached = d;
+        validQuestions.push(questions[i]);
+      });
+      questions = validQuestions;
+
+      if (!questions.length) {
+        document.getElementById('pageLoader').remove();
+        document.getElementById('content').innerHTML = '<div class="error-msg">no questions found. <a href="search.html">go back</a></div>';
+        return;
+      }
+      // sort by subsection (preserving API order of subsections, stable within each)
+      const skillOrder = [];
+      const skillGroups = {};
+      validQuestions.forEach(q => {
+        const skill = q.skill_desc || q.skillDesc || 'other';
+        if (!skillGroups[skill]) { skillGroups[skill] = []; skillOrder.push(skill); }
+        skillGroups[skill].push(q);
+      });
+      questions = skillOrder.reduce((arr, skill) => arr.concat(skillGroups[skill]), []);
+
       document.getElementById('pageLoader').remove();
       renderGrid();
       await loadQuestion(0);
@@ -313,12 +363,17 @@
     document.getElementById('content').innerHTML = '<div class="loading-state"><div class="spinner"></div><span>loading…</span></div>';
     try {
       const external_id = questions[idx].external_id;
-      const res = await fetch(`${API}/get-question`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ external_id })
-      });
-      let data = await res.json();
+      let data;
+      if (questions[idx]._cached) {
+        data = questions[idx]._cached;
+      } else {
+        const res = await fetch(`${API}/get-question`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ external_id })
+        });
+        data = await res.json();
+      }
       if ((!data.answerOptions || data.answerOptions.length === 0) && data.type !== 'spr') {
         const uId = questions[idx].uId || questions[idx].uid;
         if (uId && uId !== external_id) {
@@ -376,7 +431,7 @@
     // LEFT
     const left = document.createElement('div');
     left.className = 'passage-panel';
-    left.innerHTML = `<div class="passage-text">${stimulus || stemHTML}</div>`;
+    left.innerHTML = `<div class="passage-text">${cleanBlanks(stimulus || stemHTML)}</div>`;
 
     // RIGHT
     const right = document.createElement('div');
@@ -391,8 +446,8 @@
     qnumBar.innerHTML = `
       <div class="qnum-left">
         <div class="qnum-box" id="qnumBox" style="background:${qboxBg}">${currentIdx + 1}</div>
-        <div class="mark-review" id="markReviewBtn" onclick="handleMarkReview()" style="color:${getReviews()[currentIdx] ? '#f5a623' : ''};font-weight:${getReviews()[currentIdx] ? '600' : '400'};">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="${getReviews()[currentIdx] ? '#f5a623' : 'none'}" stroke="${getReviews()[currentIdx] ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <div class="mark-review${getReviews()[currentIdx] ? ' marked' : ''}" id="markReviewBtn" onclick="handleMarkReview()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${getReviews()[currentIdx] ? '#f5a623' : 'none'}" stroke="${getReviews()[currentIdx] ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
           ${getReviews()[currentIdx] ? 'marked for review' : 'mark for review'}
         </div>
       </div>
@@ -408,7 +463,7 @@
     if (stimulus) {
       const stemEl = document.createElement('div');
       stemEl.className = 'question-stem';
-      stemEl.innerHTML = stemHTML;
+      stemEl.innerHTML = cleanBlanks(stemHTML);
       body.appendChild(stemEl);
     }
 
@@ -433,7 +488,7 @@
         el.id = `c-${i}`;
         el.dataset.optId = opt.id;
         el.onclick = () => pickChoice(i);
-        el.innerHTML = `<div class="choice-letter" id="cl-${i}">${LETTERS[i] || i}</div><div class="choice-text">${opt.content || ''}</div>`;
+        el.innerHTML = `<div class="choice-letter" id="cl-${i}">${LETTERS[i] || i}</div><div class="choice-text">${cleanBlanks(opt.content || '')}</div>`;
         list.appendChild(el);
       });
       body.appendChild(list);
@@ -556,22 +611,53 @@
 
   function renderGrid() {
     const grid = document.getElementById('qgrid');
-    const res  = getResults();
+    const res     = getResults();
+    const reviews = getReviews();
     const answered = Object.keys(res).length;
     document.getElementById('qpopupTitle').textContent = `questions — ${answered} answered of ${questions.length}`;
     grid.innerHTML = '';
-    const reviews = getReviews();
-    questions.forEach((_, i) => {
-      const isCurrent = i === currentIdx;
-      const isAnswered = !!res[i];
-      const isReview = !!reviews[i];
-      const el = document.createElement('div');
-      let cls = 'qgrid-item ' + (isCurrent ? 'current' : isAnswered ? 'answered' : 'unanswered');
-      if (isReview) cls += ' review';
-      el.className = cls;
-      el.textContent = i + 1;
-      el.onclick = () => { toggleQList(); loadQuestion(i); };
-      grid.appendChild(el);
+
+    // group questions by skill_desc, preserving stable order within each group
+    const groups = {}; // skill -> [{q, globalIdx}]
+    const groupOrder = [];
+    questions.forEach((q, i) => {
+      const skill = q.skill_desc || q.skillDesc || 'other';
+      if (!groups[skill]) { groups[skill] = []; groupOrder.push(skill); }
+      groups[skill].push({ q, i });
+    });
+
+    groupOrder.forEach(skill => {
+      const group = document.createElement('div');
+      group.className = 'qgrid-group';
+
+      const label = document.createElement('div');
+      label.className = 'qgrid-group-label';
+      label.textContent = skill;
+      group.appendChild(label);
+
+      const items = document.createElement('div');
+      items.className = 'qgrid-group-items';
+
+      groups[skill].forEach(({ q, i }) => {
+        const isCurrent = i === currentIdx;
+        const result = res[i];
+        const isReview = !!reviews[i];
+        const el = document.createElement('div');
+        let cls = 'qgrid-item ';
+        if (result === 'correct') cls += 'correct';
+        else if (result === 'incorrect') cls += 'incorrect';
+        else cls += 'unanswered';
+        if (isCurrent) cls += ' current';
+        if (isReview) cls += ' review';
+        el.className = cls;
+        el.textContent = i + 1;
+        el.title = skill;
+        el.onclick = () => { toggleQList(); loadQuestion(i); };
+        items.appendChild(el);
+      });
+
+      group.appendChild(items);
+      grid.appendChild(group);
     });
   }
 
@@ -594,10 +680,9 @@
     const isMarked = reviews[currentIdx];
     const btn = document.getElementById('markReviewBtn');
     if (btn) {
-      btn.style.color = isMarked ? '#f5a623' : '';
-      btn.style.fontWeight = isMarked ? '600' : '400';
+      btn.className = isMarked ? 'mark-review marked' : 'mark-review';
       btn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="${isMarked ? '#f5a623' : 'none'}" stroke="${isMarked ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="${isMarked ? '#f5a623' : 'none'}" stroke="${isMarked ? '#f5a623' : 'currentColor'}" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         ${isMarked ? 'marked for review' : 'mark for review'}
       `;
     }
@@ -621,15 +706,15 @@
     const ic = document.getElementById('expandIcon');
     if (calcExpanded) {
       // near fullscreen
-      w.style.width  = '850px';
-      w.style.height = '715px';
+      w.style.width  = '800px';
+      w.style.height = '670px';
       w.style.bottom = '80px';
       w.style.right  = '24px';
       // swap to compress icon
       ic.innerHTML = `<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>`;
     } else {
       w.style.width  = '360px';
-      w.style.height = '480px';
+      w.style.height = '600px';
       // swap back to expand icon
       ic.innerHTML = `<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>`;
     }
@@ -673,11 +758,30 @@
   })();
   });
 
+  function cleanBlanks(html) {
+    // replace 3+ underscores with a styled underline span
+    return html.replace(/_{3,}/g, '<span style="display:inline-block;min-width:60px;border-bottom:1.5px solid currentColor;vertical-align:bottom;margin:0 2px;">&nbsp;</span>');
+  }
+
+  function clearAllReviews() {
+    clearReviews();
+    // re-render current mark-review btn if visible
+    const btn = document.getElementById('markReviewBtn');
+    if (btn) {
+      btn.className = 'mark-review';
+      btn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        mark for review
+      `;
+    }
+    renderGrid();
+  }
+
   boot();
 </script>
 
   <!-- CALCULATOR WIDGET -->
-  <div id="calcWidget" style="display:none;position:fixed;bottom:80px;right:24px;width:360px;height:480px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.22);border:1px solid #d0cdc7;z-index:500;flex-direction:column;overflow:hidden;">
+  <div id="calcWidget" style="display:none;position:fixed;bottom:80px;right:24px;width:360px;height:600px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.22);border:1px solid #d0cdc7;z-index:500;flex-direction:column;overflow:hidden;">
     <!-- drag handle / titlebar -->
     <div id="calcHandle" style="
       background:var(--accent);

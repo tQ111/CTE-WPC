@@ -13,8 +13,8 @@ body{
 
 .navBar{
   display:flex;
-  justify-content:left;
-  padding:15px 25px;
+  justify-content:center;
+  padding:15px 30px 25px 30px;
   background:grey;
   border-bottom:1px solid rgb(170, 170, 170);
   border-radius:6.7px;
