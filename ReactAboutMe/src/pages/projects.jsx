@@ -19,7 +19,7 @@ function projects(){
     <section className = "bigContent">
 
       <div className = "projectTitle">
-        <h1>Python - EasyGame</h1>
+        <h1 id="slideTitle">Python - EasyGame</h1>
       </div>
 
       <div className = "slideWrap">
@@ -31,8 +31,10 @@ function projects(){
         </div>
       </div>
 
+      <hr></hr>
+
       <div className = "projectTitle">
-        <h1>Java - Encryption Project</h1>
+        <h1 id="slideTitle">Java - Encryption Project</h1>
       </div>
 
       <div className = "slideWrap">

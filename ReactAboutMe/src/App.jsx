@@ -33,13 +33,34 @@ function App() {
             Discord: .sibun
           </p>
         </div>
+        
         <div id = "vertRule"></div>
+        
         <div className = "foot">
-          test
+          <h4>Bayside High School 2026</h4>
+          <p>
+            WPC Computer Programming
+            <br></br>
+            Ms.Eilon
+          </p>
         </div>
+
         <div id = "vertRule"></div>
+
         <div className = "foot">
-          test
+          <h4>Introduction Pages</h4>
+            <Link to = "/about" className = "footItem">About</Link>
+            <br></br>
+            <Link to = "/interests" className = "footItem">Interests</Link>
+        </div>
+
+        <div id = "vertRule"></div>
+
+        <div className = "foot">
+          <h4>Information Pages</h4>
+            <Link to = "/projects" className = "footItem">Projects</Link>
+            <br></br>
+            <Link to = "/resume" className = "footItem">Resume</Link> 
         </div>
       </footer>
     </>

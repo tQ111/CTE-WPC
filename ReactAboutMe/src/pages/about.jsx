@@ -8,7 +8,7 @@ function about(){
         </div>
 
         <div className = "topBox">
-          <h2>Timothy Qiu - Bayside High School</h2>
+          <h2 id="titleR">Timothy Qiu - Bayside High School</h2>
         </div>
 
         <div className = "cardRow">
