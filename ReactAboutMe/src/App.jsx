@@ -66,5 +66,5 @@ function App() {
     </>
   );
 }
-
+/** about page picture images slide type shi and then mobile accessbiility  */
 export default App;

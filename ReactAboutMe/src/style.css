@@ -109,6 +109,12 @@ ul{
   border-radius:6px;
   justify-content:center;
   text-align:center;
+  border-radius:5px;
+  border:1px solid rgb(170, 170, 170);
+}
+
+.downloadBtn:hover{
+  background-color:rgb(207, 207, 207);
 }
 
 .resumeDownload{
@@ -238,4 +244,8 @@ footer{
 
 #titleR{
   color:black;
+}
+
+@media (min-width: 800px) {
+  /**  finish this */
 }
