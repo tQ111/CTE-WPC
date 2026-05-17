@@ -32,11 +32,17 @@
     .calc-btn:hover { background: rgba(255,255,255,0.22); }
 
     .dashed { border: none; border-top: 2px dashed #ccc; flex-shrink: 0; width: 100%; margin: 0; }
+    .content > .passage-panel + .question-panel { border-left: 1.5px solid #e0ddd7; }
     .content { flex: 1; display: flex; overflow: hidden; }
 
     /* LEFT PANEL */
-    .passage-panel { flex: 1; overflow-y: auto; padding: 40px 52px; border-right: 1.5px solid #e0ddd7; min-width: 0; }
-    .passage-text { font-family: var(--serif); font-size: 16px; line-height: 1.85; color: var(--text); max-width: 100%; overflow-x: auto; }
+    .passage-panel { flex: 0 0 50%; width: 50%; overflow-y: auto; padding: 40px 52px; min-width: 0; border-right: 1.5px solid #e0ddd7; }
+    .question-panel { flex: 0 0 50%; width: 50%; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+    .question-panel.single { flex: 1; width: 100%; overflow-y: auto; }
+    .content { flex: 1; display: flex; overflow: hidden; border-top: none; }
+    .passage-panel + .question-panel { border-left: 1.5px solid #e0ddd7; }
+    .passage-text { font-family: var(--serif); font-size: 16px; line-height: 1.85; color: var(--text); max-width: 100%; overflow-x: auto; text-align: left; }
+    .passage-text figure, .passage-text p:has(svg), .passage-text p:has(img) { text-align: center; }
     .passage-text p { margin-bottom: 14px; }
     .passage-text p:last-child { margin-bottom: 0; }
     .passage-text figure { margin: 16px 0; text-align: center; }
@@ -47,7 +53,6 @@
     .passage-text th, .question-stem th { background: #f0eeea; font-weight: 600; }
 
     /* RIGHT PANEL */
-    .question-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
     .qnum-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 24px; border-bottom: 1px solid var(--border-light); background: #faf9f7; flex-shrink: 0; }
     .qnum-left { display: flex; align-items: center; gap: 10px; }
     .qnum-box { width: 30px; height: 30px; background: var(--accent); color: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; transition: background 0.2s; }
@@ -59,16 +64,18 @@
     .diff-M { background: #fff4e0; color: #8b5e00; }
     .diff-H { background: #fdeaea; color: #8b1a1a; }
     .topic-tag { font-size: 11.5px; color: var(--text-light); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-    .retry-btn { padding: 8px 20px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 6px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; align-self: flex-start; }
+    .retry-btn { padding: 10px 28px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 6px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; align-self: center; width: fit-content; }
     .retry-btn:hover { background: var(--accent-light); }
+    .action-area.centered .retry-btn { align-self: center; }
 
     /* BODY — two modes */
-    .question-body { flex: 1; min-height: 0; overflow-y: auto; padding: 24px 24px 0; display: flex; flex-direction: column; gap: 18px; }
-    /* centered single-panel: cap width and center horizontally */
-    .question-body.centered { align-items: center; }
+    .question-body { flex: 1; min-height: 0; overflow-y: auto; padding: 24px 24px 12px; display: flex; flex-direction: column; gap: 18px; }
+    .question-body.centered { align-items: center; padding-top: 24px; flex: 0 1 auto; overflow: visible; }
     .question-body.centered > * { width: 100%; max-width: 640px; }
     .question-stem { font-family: var(--serif); font-size: 16px; line-height: 1.75; color: var(--text); }
     .question-stem p { margin-bottom: 8px; }
+    /* centered qnum bar sits in content flow */
+    .qnum-bar.inline { background: #faf9f7; border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 16px; margin-bottom: 2px; }
 
     /* CHOICES */
     .choices-list { display: flex; flex-direction: column; gap: 9px; }
@@ -79,26 +86,33 @@
     .choice.incorrect { border-color: var(--incorrect-border); background: var(--incorrect-bg); }
     .choice.disabled  { cursor: default; }
     .choice.crossed   { opacity: 0.38; }
-    .choice.crossed .choice-text { text-decoration: line-through; text-decoration-color: var(--text-muted); text-decoration-thickness: 1.5px; }
+    .choice.crossed .choice-text { text-decoration: line-through; text-decoration-color: var(--text); text-decoration-thickness: 1px; }
     .choice-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; border: 1.5px solid #aaa; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--text-muted); transition: all 0.12s; flex-shrink: 0; }
     .choice.selected  .choice-letter { background: var(--accent);    border-color: var(--accent);    color: white; }
     .choice.correct   .choice-letter { background: var(--correct);   border-color: var(--correct);   color: white; }
     .choice.incorrect .choice-letter { background: var(--incorrect); border-color: var(--incorrect); color: white; }
-    .choice-text { font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--text); flex: 1; overflow-x: auto; }
+    .choice-text { font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: var(--text); flex: 1; overflow: hidden; }
     /* cross-out button */
     .cross-btn { width: 22px; height: 22px; min-width: 22px; border-radius: 50%; border: 1.5px solid transparent; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; font-weight: 700; line-height: 1; color: transparent; transition: all 0.12s; flex-shrink: 0; }
     .choice:hover .cross-btn { color: #bbb; border-color: #ccc; }
     .choice.crossed .cross-btn { color: var(--text-muted); border-color: var(--text-muted); background: #ece9e2; }
     .choice.disabled .cross-btn { display: none; }
 
-    .action-area { padding: 16px 24px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; max-height: 360px; overflow-y: auto; }
-    .action-area.centered { align-items: center; }
+    .action-area { padding: 16px 24px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; }
+    .action-area.centered { align-items: center; display: flex; flex-direction: column; gap: 14px; }
     .action-area.centered > * { width: 100%; max-width: 640px; }
+    .action-area.centered .retry-btn { align-self: center; width: fit-content; max-width: none; }
+    .action-area.centered .rationale-box { width: 100%; max-width: 640px; }
     .submit-btn { padding: 10px 28px; background: var(--accent); color: white; border: none; border-radius: 6px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; align-self: flex-end; }
+    .action-area.centered .submit-btn { align-self: center; padding: 10px 48px; }
+    .action-area.centered { padding-top: 8px; }
     .submit-btn:hover:not(:disabled) { opacity: 0.85; }
     .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
     .rationale-box { border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; animation: fadeUp 0.2s ease; }
+    .rationale-content { padding: 14px 16px; font-family: var(--serif); font-size: 14.5px; line-height: 1.75; max-height: 220px; overflow-y: auto; }
+    .rationale-content p { margin-bottom: 8px; }
+    .rationale-content p:last-child { margin-bottom: 0; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
     .rationale-result { padding: 10px 14px; font-size: 13.5px; font-weight: 600; }
     .rationale-result.correct   { color: var(--correct);   background: var(--correct-bg);   border-bottom: 1px solid var(--correct-border); }
@@ -128,14 +142,13 @@
     .qgrid { display: flex; flex-direction: column; gap: 0; max-height: 320px; overflow-y: auto; }
     .qgrid-group { margin-bottom: 14px; }
     .qgrid-group-label { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(--border-light); }
-    .qgrid-group-items { display: flex; flex-wrap: wrap; gap: 7px; }
-    .qgrid-item { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.12s; }
+    .qgrid-group-items { display: flex; flex-wrap: wrap; gap: 9px; }
+    .qgrid-item { width: 42px; height: 42px; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.12s; }
     .qgrid-item:hover { opacity: 0.75; transform: scale(1.06); }
     .qgrid-item.unanswered { background: white; color: var(--accent); border-color: var(--accent); }
     .qgrid-item.correct    { background: var(--correct);   color: white; border-color: var(--correct); }
     .qgrid-item.incorrect  { background: var(--incorrect); color: white; border-color: var(--incorrect); }
     .qgrid-item.current    { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(26,58,92,0.35); border-width: 3px !important; }
-    .qgrid-item.review::after { content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 14px 14px 0; border-color:transparent #f5a623 transparent transparent; border-radius:0 4px 0 0; }
 
     /* LOADING */
     .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 14px; color: var(--text-muted); font-size: 14px; }
@@ -152,16 +165,24 @@
     .math-var     { font-style: italic; }
     .math-num     { font-style: normal; }
     .math-op      { font-style: normal; padding: 0 0.18em; }
-    .math-frac    { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-size: 0.85em; line-height: 1.15; margin: 0 0.15em; }
-    .math-frac-n  { border-bottom: 1.2px solid currentColor; padding: 0 4px 1px; text-align: center; }
-    .math-frac-d  { padding: 1px 4px 0; text-align: center; }
-    .math-sup     { font-size: 0.72em; vertical-align: super; line-height: 0; margin-left: 0.04em; font-style: inherit; }
-    .math-sub     { font-size: 0.72em; vertical-align: sub;   line-height: 0; margin-left: 0.02em; font-style: inherit; }
+    .math-frac    { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; font-size: 0.85em; line-height: 1.15; margin: 0 0.15em; }
+    .math-frac-n  { border-bottom: 1.2px solid currentColor; padding: 0 4px 1px; text-align: center; white-space: nowrap; }
+    .math-frac-d  { padding: 1px 4px 0; text-align: center; white-space: nowrap; }
+    .math-sup     { font-size: 0.72em; vertical-align: super; line-height: 0; margin-left: 0.04em; font-style: inherit; display: inline-block; transform: translateY(-0.15em); }
+    .math-sup .math-frac { font-size: 0.85em; line-height: 1.15; }
+    .math-sub     { font-size: 0.82em; vertical-align: sub; line-height: 0; margin-left: 0.02em; font-style: inherit; }
+    .math-sub .math-frac { font-size: 1em; }
     .math-sqrt    { display: inline-flex; align-items: center; }
     .math-sqrt-sym  { font-style: normal; margin-right: 1px; font-size: 1.1em; line-height: 1; }
     .math-sqrt-body { border-top: 1.4px solid currentColor; padding: 0 2px; }
     .math-abs     { font-style: normal; }
     .math-paren   { font-style: normal; }
+    .timer-display { display:flex; align-items:center; gap:5px; color:white; font-size:12.5px; font-family:var(--sans); font-weight:500; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:5px; padding:5px 10px; }
+    .passage-text p, .passage-text li, .passage-text ul, .passage-text ol { text-align: left !important; }
+    .passage-text p:has(svg), .passage-text p:has(img), .passage-text figure { text-align: center !important; }
+    .passage-text li { text-align: left !important; display: block; margin-bottom: 0 !important; padding: 0; line-height: 1.6; }
+    .passage-text ul, .passage-text ol { margin: 0; padding: 0; list-style: none; }
+    .passage-text ul { border: none; }
   </style>
 </head>
 <body>
@@ -199,7 +220,7 @@
     <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);"><div style="width:18px;height:18px;border-radius:4px;background:white;border:2px solid var(--accent);"></div>unanswered</div>
     <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);"><div style="width:18px;height:18px;border-radius:4px;background:var(--correct);border:2px solid var(--correct);"></div>correct</div>
     <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);"><div style="width:18px;height:18px;border-radius:4px;background:var(--incorrect);border:2px solid var(--incorrect);"></div>incorrect</div>
-    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);"><div style="position:relative;width:18px;height:18px;border-radius:4px;background:white;border:2px solid var(--accent);"><div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 10px 10px 0;border-color:transparent #f5a623 transparent transparent;border-radius:0 3px 0 0;"></div></div>for review</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);font-family:var(--sans);"><div style="position:relative;width:18px;height:18px;border-radius:4px;background:white;border:2px solid var(--accent);overflow:visible;"><div style="position:absolute;top:-8px;right:-5px;width:14px;height:20px;background:white;padding:0 2px;border-radius:2px 2px 0 0;"><svg viewBox="0 0 24 24" fill="#f5a623" stroke="#e09010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>for review</div>
   </div>
   <div class="qgrid" id="qgrid"></div>
 </div>
@@ -221,7 +242,9 @@
       </button>
     </div>
   </div>
-  <iframe id="calcFrame" src="https://www.desmos.com/testing/collegeboard/graphing" style="flex:1;border:none;width:100%;height:100%;" title="Calculator"></iframe>
+  <div style="flex:1;overflow:hidden;position:relative;">
+    <iframe id="calcFrame" src="https://www.desmos.com/graphing" style="position:absolute;top:-52px;left:0;width:100%;height:calc(100% + 52px);border:none;" title="Calculator"></iframe>
+  </div>
 </div>
 
 <script>
@@ -260,7 +283,80 @@
     });
   }
 
-  function renderAlttext(raw) { return parseMath(tokenizeMath(raw), 0).html; }
+  function renderAlttext(raw) {
+    // upper X → just X (italic variable), e.g. "upper P" → "P"
+    raw = raw.replace(/\bupper\s+([A-Z])\b/g, '$1');
+    // extra fraction words CB uses
+    raw = raw.replace(/\bone twelfth\b/gi, 'StartFraction 1 Over 12 EndFraction');
+    raw = raw.replace(/\bone ninth\b/gi, 'StartFraction 1 Over 9 EndFraction');
+    raw = raw.replace(/\bone seventh\b/gi, 'StartFraction 1 Over 7 EndFraction');
+    raw = raw.replace(/\btwo fifths\b/gi, 'StartFraction 2 Over 5 EndFraction');
+    raw = raw.replace(/\bthree fifths\b/gi, 'StartFraction 3 Over 5 EndFraction');
+    raw = raw.replace(/\bfour fifths\b/gi, 'StartFraction 4 Over 5 EndFraction');
+    raw = raw.replace(/\bthree sevenths\b/gi, 'StartFraction 3 Over 7 EndFraction');
+    raw = raw.replace(/\btwo ninths\b/gi, 'StartFraction 2 Over 9 EndFraction');
+    // Convert English ordinal fraction phrases
+    const ONES = {'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10,'eleven':11,'twelve':12,'thirteen':13,'fourteen':14,'fifteen':15,'sixteen':16,'seventeen':17,'eighteen':18,'nineteen':19};
+    const TENS = {'twenty':20,'thirty':30,'forty':40,'fifty':50,'sixty':60,'seventy':70,'eighty':80,'ninety':90};
+    const ORDINALS = {'first':1,'second':2,'third':3,'fourth':4,'fifth':5,'sixth':6,'seventh':7,'eighth':8,'ninth':9,'tenth':10,'eleventh':11,'twelfth':12,'thirteenth':13,'fourteenth':14,'fifteenth':15,'sixteenth':16,'seventeenth':17,'eighteenth':18,'nineteenth':19,'twentieth':20,'thirtieth':30,'fortieth':40,'fiftieth':50,'sixtieth':60,'seventieth':70,'eightieth':80,'ninetieth':90,'hundredth':100,'thousandth':1000};
+    const ORDINAL_TENS = {'twenty':20,'thirty':30,'forty':40,'fifty':50,'sixty':60,'seventy':70,'eighty':80,'ninety':90};
+
+    function wordToNum(word) {
+      word = word.toLowerCase();
+      if (ONES[word] !== undefined) return ONES[word];
+      if (TENS[word] !== undefined) return TENS[word];
+      return null;
+    }
+    function ordinalToNum(word) {
+      word = word.toLowerCase();
+      if (ORDINALS[word] !== undefined) return ORDINALS[word];
+      // "twenty first" style handled separately
+      return null;
+    }
+
+    // Match patterns like "one eighty fourth", "four twenty firsts", "two thirds" etc.
+    // Pattern: (numerator_word(s)) (ordinal_denominator_word(s)) [with optional 's' for plural]
+    raw = raw.replace(/\b([a-z]+(?:\s+[a-z]+)?)\s+([a-z]+(?:\s+[a-z]+)?(?:s|th|st|nd|rd)?)\b/gi, (match) => {
+      const words = match.toLowerCase().split(/\s+/);
+      if (words.length < 2 || words.length > 4) return match;
+
+      // Try to parse numerator (first 1-2 words) and denominator (last 1-2 words)
+      for (let split = 1; split < words.length; split++) {
+        const numWords = words.slice(0, split);
+        const denWords = words.slice(split);
+
+        // Parse numerator
+        let num = null;
+        if (numWords.length === 1) num = wordToNum(numWords[0]);
+        else if (numWords.length === 2) {
+          const t = TENS[numWords[0]], o = ONES[numWords[1]];
+          if (t && o) num = t + o;
+        }
+
+        // Parse denominator (strip plural s if present)
+        let den = null;
+        let denStr = denWords.join(' ').replace(/s$/i, '');
+        if (denWords.length === 1) den = ordinalToNum(denStr);
+        else if (denWords.length === 2) {
+          // e.g. "twenty first" → 21
+          const t = ORDINAL_TENS[denWords[0]];
+          const o = ordinalToNum(denWords[1].replace(/s$/i,''));
+          if (t && o) den = t + o;
+          // e.g. "eighty fourth" → 84
+          const t2 = TENS[denWords[0]];
+          const o2 = ordinalToNum(denWords[1].replace(/s$/i,''));
+          if (t2 && o2) den = t2 + o2;
+        }
+
+        if (num !== null && den !== null && den > 0) {
+          return `StartFraction ${num} Over ${den} EndFraction`;
+        }
+      }
+      return match;
+    });
+
+    return parseMath(tokenizeMath(raw), 0).html;
+  }
 
   function tokenizeMath(str) {
     const P = [
@@ -271,15 +367,25 @@
       ['left parenthesis','LPAREN'],['right parenthesis','RPAREN'],
       ['left bracket','LBRACKET'],['right bracket','RBRACKET'],
       ['left brace','LBRACE'],['right brace','RBRACE'],
-      ['plus or minus','OP:±'],['greater than or equal to','OP:≥'],
-      ['less than or equal to','OP:≤'],['not equal to','OP:≠'],
+      ['plus or minus','OP:±'],
+      ['greater than or equal to','OP:≥'],
+      ['greater than or equals','OP:≥'],
+      ['greater than or equal','OP:≥'],
+      ['less than or equal to','OP:≤'],
+      ['less than or equals','OP:≤'],
+      ['less than or equal','OP:≤'],
+      ['not equal to','OP:≠'],
       ['greater than','OP:>'],['less than','OP:<'],['equals','OP:='],
       ['times','OP:×'],['divided by','OP:÷'],['minus','OP:−'],['plus','OP:+'],
       ['negative','NEG'],
       ['one tenth','WFRAC:1:10'],['one half','WFRAC:1:2'],['one third','WFRAC:1:3'],
       ['one fourth','WFRAC:1:4'],['one fifth','WFRAC:1:5'],['one sixth','WFRAC:1:6'],
-      ['one eighth','WFRAC:1:8'],['two thirds','WFRAC:2:3'],
-      ['three fourths','WFRAC:3:4'],['three halves','WFRAC:3:2'],
+      ['one seventh','WFRAC:1:7'],['one eighth','WFRAC:1:8'],['one ninth','WFRAC:1:9'],
+      ['one twelfth','WFRAC:1:12'],['one hundredth','WFRAC:1:100'],
+      ['two thirds','WFRAC:2:3'],['two fifths','WFRAC:2:5'],['two sevenths','WFRAC:2:7'],
+      ['three fourths','WFRAC:3:4'],['three fifths','WFRAC:3:5'],['three halves','WFRAC:3:2'],
+      ['four fifths','WFRAC:4:5'],['four thirds','WFRAC:4:3'],
+      ['five halves','WFRAC:5:2'],['five thirds','WFRAC:5:3'],
       ['pi','VAR:π'],['infinity','VAR:∞'],['theta','VAR:θ'],
       ['alpha','VAR:α'],['beta','VAR:β'],['gamma','VAR:γ'],
       ['delta','VAR:δ'],['sigma','VAR:σ'],
@@ -352,19 +458,33 @@
   function cleanBlanks(str) {
     if (!str) return str;
     str = cleanMathML(str);
+
+    // strip sr-only spans
     str = str.replace(/<span[^>]*class="[^"]*sr-only[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '');
-    str = str.replace(/<ul[^>]*class="[^"]*sr-only[^"]*"[^>]*>[\s\S]*?<\/ul>/gi, '');
+    // strip sr-only and graph description elements — use greedy match to handle nesting
+    str = str.replace(/<div[^>]*(?:class="[^"]*sr-only[^"]*"|role="region")[^>]*>[\s\S]*?<\/div>/gi, '');
+    str = str.replace(/<[a-z]+[^>]*class="[^"]*sr-only[^"]*"[^>]*>[\s\S]*?<\/[a-z]+>/gi, '');
+    // strip empty aria-hidden spacers
     str = str.replace(/<[a-z]+[^>]*aria-hidden="true"[^>]*>\s*<\/[a-z]+>/gi, '');
+    // aria-hidden underscore blank lines
     str = str.replace(/<span[^>]*aria-hidden="true"[^>]*>_{3,}<\/span>/gi,
       '<span style="display:inline-block;min-width:60px;border-bottom:1.7px solid currentColor;vertical-align:+0.5em;margin:0 2px;">&nbsp;</span>');
     str = str.replace(/_{3,}/g,
       '<span style="display:inline-block;min-width:60px;border-bottom:1.7px solid currentColor;vertical-align:+0.5em;margin:0 2px;">&nbsp;</span>');
-    // upper prefix: <i>upperP</i> → <i>P</i>, plain upperP → italic P
+
+    // upper prefix in italic tags: <i>upperP</i> → <i>P</i>
     str = str.replace(/<i>upper([A-Za-z])<\/i>/gi, '<i>$1</i>');
+    // upper prefix plain text: upperP → italic P
     str = str.replace(/\bupper([A-Za-z])\b/g, '<span style="font-style:italic;">$1</span>');
+
     // (X comma Y) → (X, Y)
     str = str.replace(/\(\s*([^)]*?)\s+comma\s+([^)]*?)\s*\)/gi, (m,a,b) => `(${a.trim()}, ${b.trim()})`);
     str = str.replace(/\bcomma\b/gi, ',');
+
+    // strip inline text-align:center from text elements (CSS handles alignment)
+    str = str.replace(/(<(?:p|li|ul|ol|div|span)[^>]*?)style="([^"]*?)\btext-align\s*:\s*center\b[^"]*?"([^>]*?>)/gi,
+      (m, open, s, close) => m.includes('figure') || m.includes('image') ? m : `${open}${close}`);
+
     return str;
   }
 
@@ -378,9 +498,14 @@
     });
     // a^b
     s = s.replace(/([A-Za-z0-9.]+)\^([A-Za-z0-9.]+)/g, (m,b,e) => `${b}<span class="math-sup">${e}</span>`);
-    // a/b
-    s = s.replace(/(-?[A-Za-z0-9.]+)\/(-?[A-Za-z0-9.]+)/g,
-      (m,n,d) => `<span class="math-frac"><span class="math-frac-n">${n}</span><span class="math-frac-d">${d}</span></span>`);
+    // a/b — supports expressions in parens like x/(2x+3) or (x+1)/(x-1)
+    s = s.replace(/(\([\s\S]*?\)|[A-Za-z0-9.]+)\/(\([\s\S]*?\)|[A-Za-z0-9.]+)/g,
+      (m,n,d) => {
+        // strip outer parens for display
+        const nd = n.replace(/^\(|\)$/g,'');
+        const dd = d.replace(/^\(|\)$/g,'');
+        return `<span class="math-frac"><span class="math-frac-n">${nd}</span><span class="math-frac-d">${dd}</span></span>`;
+      });
     return s;
   }
 
@@ -391,7 +516,8 @@
     const clearBtn = `<button class="calc-btn" onclick="clearAllReviews()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/></svg>
       clear reviews</button>`;
-    document.getElementById('headerRight').innerHTML = clearBtn + (isMath ? `
+    const timerBtn=`<div class="timer-display"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="timerDisplay">0:00</span></div>`;
+    document.getElementById('headerRight').innerHTML = timerBtn + clearBtn + (isMath ? `
       <button class="calc-btn" onclick="toggleCalc()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
         calculator</button>` : '');
@@ -479,12 +605,14 @@
   function renderQuestion() {
     const meta=questions[currentIdx], q=currentQ;
     if (!q) return;
+    startTimer();
     const el=document.getElementById('headerTopic'); if(el) el.textContent=meta.skill_desc||'';
 
     const isSPR=q.type==='spr', opts=q.answerOptions||[];
     const stimulus=q.stimulus||'', stem=q.stem||'';
     const stemPlain=stem.replace(/<[^>]+>/g,'').trim();
-    const hasStim=!!stimulus, twoPanel=hasStim||stemPlain.length>140;
+    const hasSVG=stem.includes('<svg');
+    const hasStim=!!stimulus, twoPanel=hasStim||hasSVG||stemPlain.length>140;
 
     const content=document.getElementById('content'); content.innerHTML='';
     const res=getResults(), prev=res[currentIdx];
@@ -514,24 +642,33 @@
     if (twoPanel) {
       const left=document.createElement('div'); left.className='passage-panel';
       left.innerHTML=`<div class="passage-text">${cleanBlanks(hasStim?stimulus:stem)}</div>`;
+      // remove sr-only and graph description elements from rendered DOM
+      left.querySelectorAll('[class*="sr-only"],[role="region"],[aria-label*="Long description"]').forEach(el=>el.remove());
       if (hasStim&&stem){const se=document.createElement('div');se.className='question-stem';se.innerHTML=cleanBlanks(stem);body.appendChild(se);}
-      buildChoices(isSPR,opts,body,aa);
+      buildChoices(isSPR,opts,body,aa,false);
       const right=document.createElement('div'); right.className='question-panel';
       right.appendChild(qbar); right.appendChild(body); right.appendChild(aa);
       content.appendChild(left); content.appendChild(right);
     } else {
-      if (stem){const se=document.createElement('div');se.className='question-stem';se.innerHTML=cleanBlanks(stem);body.appendChild(se);}
-      buildChoices(isSPR,opts,body,aa);
-      const right=document.createElement('div'); right.className='question-panel';
-      right.appendChild(qbar); right.appendChild(body); right.appendChild(aa);
+      // inline qnum bar flows with centered content
+      qbar.classList.add('inline');
+      body.appendChild(qbar);
+      if (stem){
+        const se=document.createElement('div');se.className='question-stem';se.innerHTML=cleanBlanks(stem);
+        se.querySelectorAll('[class*="sr-only"],[role="region"],[aria-label*="Long description"]').forEach(el=>el.remove());
+        body.appendChild(se);
+      }
+      buildChoices(isSPR,opts,body,aa,true);
+      const right=document.createElement('div'); right.className='question-panel single';
+      right.appendChild(body); right.appendChild(aa);
       content.appendChild(right);
     }
   }
 
-  function buildChoices(isSPR, opts, body, aa) {
+  function buildChoices(isSPR, opts, body, aa, centered) {
     if (isSPR) {
-      const w=document.createElement('div'); w.className='spr-wrapper';
-      w.innerHTML=`
+      const wrap=document.createElement('div'); wrap.className='spr-wrapper';
+      wrap.innerHTML=`
         <div class="spr-label">enter your answer</div>
         <input id="sprInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
           style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--serif);font-size:15px;outline:none;" placeholder="your answer…">
@@ -542,16 +679,24 @@
         <div class="spr-hint">^ for exponents &nbsp;·&nbsp; / for fractions &nbsp;·&nbsp; e.g.
           <code style="font-size:11px;background:#ece9e2;padding:1px 4px;border-radius:3px;">x^2</code>
           <code style="font-size:11px;background:#ece9e2;padding:1px 4px;border-radius:3px;">3/4</code></div>`;
-      body.appendChild(w);
+      body.appendChild(wrap);
+      aa.innerHTML=`<button class="submit-btn" id="submitBtn" onclick="submitSPR()" disabled style="${centered?'align-self:center':'align-self:flex-end'}">Submit</button>`;
       setTimeout(()=>{
-        const inp=document.getElementById('sprInput'),pre=document.getElementById('sprPreview');
-        if(!inp||!pre)return;
-        inp.addEventListener('input',()=>{pre.innerHTML=inp.value.trim()?formatSPRPreview(inp.value):'&nbsp;';});
+        const inp=document.getElementById('sprInput');
+        const pre=document.getElementById('sprPreview');
+        const sb=document.getElementById('submitBtn');
+        if(!inp||!pre) return;
+        inp.addEventListener('input',()=>{
+          const v=inp.value.trim();
+          pre.innerHTML=v?formatSPRPreview(inp.value):'&nbsp;';
+          if(sb) sb.disabled=!v;
+        });
       },0);
-      aa.innerHTML=`<button class="submit-btn" onclick="submitSPR()">Submit</button>`;
     } else if (!opts.length) {
-      const d=document.createElement('div'); d.style.cssText='font-size:13px;color:var(--text-muted);padding:12px 0;';
-      d.textContent='this question could not be loaded. press next to continue.'; body.appendChild(d);
+      const d=document.createElement('div');
+      d.style.cssText='font-size:13px;color:var(--text-muted);padding:12px 0;';
+      d.textContent='this question could not be loaded. press next to continue.';
+      body.appendChild(d);
     } else {
       const list=document.createElement('div'); list.className='choices-list';
       opts.forEach((opt,i)=>{
@@ -560,11 +705,11 @@
         const text=document.createElement('div'); text.className='choice-text'; text.innerHTML=cleanBlanks(opt.content||'');
         const xb=document.createElement('button'); xb.className='cross-btn'; xb.title='cross out'; xb.textContent='✕';
         xb.onclick=e=>{
-          e.stopPropagation(); if(submitted)return;
+          e.stopPropagation(); if(submitted) return;
           el.classList.toggle('crossed');
           if(el.classList.contains('crossed')&&el.classList.contains('selected')){
             el.classList.remove('selected'); selectedChoice=null;
-            const sb=document.getElementById('submitBtn'); if(sb)sb.disabled=true;
+            const sb=document.getElementById('submitBtn'); if(sb) sb.disabled=true;
           }
         };
         el.onclick=()=>pickChoice(i);
@@ -572,7 +717,7 @@
         list.appendChild(el);
       });
       body.appendChild(list);
-      aa.innerHTML=`<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit</button>`;
+      aa.innerHTML=`<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled style="${centered?'align-self:center':'align-self:flex-end'}">Submit</button>`;
     }
   }
 
@@ -590,34 +735,26 @@
     const box=document.getElementById('qnumBox');
     if(box)box.style.background=isCorrect?'var(--correct)':'var(--incorrect)';
     const aa=document.getElementById('actionArea');
-    aa.innerHTML=`
-      ${!isCorrect?`<button class="retry-btn" onclick="retryQuestion()">↺ try again</button>`:''}
+        aa.innerHTML=`
       <div class="rationale-box">
         <div class="rationale-result ${isCorrect?'correct':'incorrect'}">${isCorrect?'✓ correct':'✗ incorrect'}</div>
         <div class="rationale-content">${rationaleHTML}</div>
-      </div>`;
+      </div>
+      ${!isCorrect?`<button class="retry-btn" onclick="retryQuestion()">↺ try again</button>`:''}`;
   }
 
   function retryQuestion() {
     submitted=false; selectedChoice=null;
-    const isSPR=currentQ&&currentQ.type==='spr';
     const box=document.getElementById('qnumBox'); if(box)box.style.background='var(--accent)';
     const r=getResults(); delete r[currentIdx]; sessionStorage.setItem(SESSION_KEY,JSON.stringify(r));
     renderGrid();
-    const aa=document.getElementById('actionArea');
-    if(isSPR){
-      const inp=document.getElementById('sprInput');
-      if(inp){inp.disabled=false;inp.value='';inp.style.borderColor='';inp.style.background='';}
-      const pre=document.getElementById('sprPreview'); if(pre)pre.innerHTML='&nbsp;';
-      aa.innerHTML=`<button class="submit-btn" onclick="submitSPR()">Submit</button>`;
-    } else {
-      document.querySelectorAll('.choice').forEach(el=>el.classList.remove('disabled','correct','incorrect','selected','crossed'));
-      aa.innerHTML=`<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit</button>`;
-    }
+    // fully re-render the question to reset everything cleanly
+    renderQuestion();
   }
 
   function submitAnswer() {
     if(selectedChoice===null||submitted)return; submitted=true;
+    stopTimer();
     const opts=currentQ.answerOptions||[], cids=new Set(currentQ.keys||[]), cset=new Set();
     opts.forEach((o,i)=>{if(cids.has(o.id))cset.add(i);});
     const ok=cset.has(selectedChoice);
@@ -631,6 +768,7 @@
 
   function submitSPR() {
     const inp=document.getElementById('sprInput'); if(!inp||submitted)return; submitted=true;
+    stopTimer();
     const val=inp.value.trim(), cids=new Set((currentQ.keys||[]).map(String)), ok=cids.has(val);
     inp.disabled=true;
     inp.style.borderColor=ok?'var(--correct-border)':'var(--incorrect-border)';
@@ -639,8 +777,8 @@
     showResult(ok, cleanBlanks(currentQ.rationale||'<p>no explanation available.</p>')+note);
   }
 
-  function goBack(){if(currentIdx>0)loadQuestion(currentIdx-1);}
-  function goNext(){if(currentIdx<questions.length-1)loadQuestion(currentIdx+1);}
+  function goBack(){if(currentIdx>0){stopTimer();loadQuestion(currentIdx-1);}}
+  function goNext(){if(currentIdx<questions.length-1){stopTimer();loadQuestion(currentIdx+1);}}
   function updateNavBtns(){
     document.getElementById('backBtn').disabled=currentIdx===0;
     document.getElementById('nextBtn').disabled=currentIdx===questions.length-1;
@@ -655,20 +793,36 @@
     document.getElementById('qpopupTitle').textContent=`questions — ${Object.keys(res).length} answered of ${questions.length}`;
     grid.innerHTML='';
     const gs={},go=[];
-    questions.forEach((q,i)=>{const sk=q.skill_desc||q.skillDesc||'other';if(!gs[sk]){gs[sk]=[];go.push(sk);}gs[sk].push({q,i});});
+    questions.forEach((q,i)=>{
+      const sk=q.skill_desc||q.skillDesc||'other';
+      if(!gs[sk]){gs[sk]=[];go.push(sk);}
+      gs[sk].push({q,i});
+    });
     go.forEach(sk=>{
       const g=document.createElement('div'); g.className='qgrid-group';
-      const l=document.createElement('div'); l.className='qgrid-group-label'; l.textContent=sk; g.appendChild(l);
+      const l=document.createElement('div'); l.className='qgrid-group-label'; l.textContent=sk;
+      g.appendChild(l);
       const it=document.createElement('div'); it.className='qgrid-group-items';
       gs[sk].forEach(({q,i})=>{
-        const el=document.createElement('div'), r=res[i];
+        const el=document.createElement('div');
+        const r=res[i];
         let cls='qgrid-item '+(r==='correct'?'correct':r==='incorrect'?'incorrect':'unanswered');
-        if(i===currentIdx)cls+=' current'; if(rev[i])cls+=' review';
-        el.className=cls; el.textContent=i+1; el.title=sk;
-        el.onclick=()=>{toggleQList();loadQuestion(i);};
+        if(i===currentIdx) cls+=' current';
+        if(rev[i]) cls+=' review';
+        el.className=cls;
+        el.textContent=i+1;
+        el.title=sk;
+        if(rev[i]){
+          const bm=document.createElement('div');
+          bm.style.cssText='position:absolute;top:-10px;right:-8px;width:20px;height:28px;background:transparent;padding:0 2px;border-radius:4px 4px 0 0;';
+          bm.innerHTML=`<svg viewBox="0 0 24 24" fill="#f5a623" stroke="#e09010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+          el.appendChild(bm);
+        }
+        el.onclick=()=>{toggleQList();stopTimer();loadQuestion(i);};
         it.appendChild(el);
       });
-      g.appendChild(it); grid.appendChild(g);
+      g.appendChild(it);
+      grid.appendChild(g);
     });
   }
 
@@ -717,6 +871,28 @@
     document.addEventListener('mouseup',()=>{drag=false;h.style.cursor='grab';});
   });
 
+    // ── TIMER ───────────────────────────────────────────────────────────────────
+  let timerSeconds=0, timerInterval=null;
+
+  function startTimer() {
+    timerSeconds=0;
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval=setInterval(()=>{
+      timerSeconds++;
+      updateTimerDisplay();
+    },1000);
+  }
+
+  function updateTimerDisplay() {
+    const el=document.getElementById('timerDisplay');
+    if(!el) return;
+    const m=Math.floor(timerSeconds/60);
+    const s=timerSeconds%60;
+    el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  }
+
+  function stopTimer() { clearInterval(timerInterval); }
   boot();
 </script>
 </body>
